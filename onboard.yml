@@ -1,0 +1,78 @@
+#cloud-config
+##bootcmd (lines 2-19) can be removed when https://github.com/F5Networks/f5-declarative-onboarding/issues/129 is resolved. 
+bootcmd:
+  - touch /var/tmp/bootcmd_start
+  - touch /config/custom-config.sh
+  - echo "#!/bin/bash" >> /config/custom-config.sh
+  - echo "touch /var/tmp/write_files_start" >> /config/custom-config.sh
+  - echo "# Wait for MCPD to be up before running tmsh commands" >> /config/custom-config.sh
+  - echo "source /usr/lib/bigstart/bigip-ready-functions" >> /config/custom-config.sh
+  - echo "wait_bigip_ready" >> /config/custom-config.sh
+  - echo "sleep 30" >> /config/custom-config.sh
+  - echo "touch /var/tmp/custom_done" >> /config/custom-config.sh
+  - echo "# Begin BIG-IP configuration" >> /config/custom-config.sh
+  - echo "tmsh modify sys global-settings mgmt-dhcp disabled" >> /config/custom-config.sh
+  - echo "tmsh save /sys config" >> /config/custom-config.sh
+  - chmod +x /config/custom-config.sh
+  - /config/custom-config.sh
+  - touch /var/tmp/bootcmd_end
+#cloud-config
+tmos_declared:
+  enabled: true
+  icontrollx_trusted_sources: false
+  icontrollx_package_urls:
+    - "${DO_URL}"
+    - "${AS3_URL}"
+    - "${TS_URL}"
+  do_declaration:
+    schemaVersion: 1.0.0
+    class: Device
+    async: true
+    label: Cloudinit Onboarding
+    Common:
+      class: Tenant
+      provisioningLevels:
+        class: Provision
+        ltm: nominal
+      poolLicense:
+        class: License
+        licenseType: licensePool
+        bigIqHost: ${bigiq_license_host}
+        bigIqUsername: ${bigiq_license_username}
+        bigIqPassword: ${bigiq_license_password}
+        licensePool: ${bigiq_license_licensepool}
+        skuKeyword1: ${bigiq_license_skuKeyword1}
+        skuKeyword2: ${bigiq_license_skuKeyword2}
+        unitOfMeasure: ${bigiq_license_unitOfMeasure}
+        hypervisor: ${bigiq_hypervisor}
+        overwrite: true
+        reachable: true
+      dnsServers:
+        class: DNS
+        nameServers:
+          - ${name_servers}
+        search:
+          - ${search_domain}
+      ntpServers:
+        class: NTP
+        servers:
+          - 0.pool.ntp.org
+          - 1.pool.ntp.org
+          - 2.pool.ntp.org
+      default:
+        class: Route
+        gw: ${default_gw}
+        network: default
+        mtu: 1500
+      dbvars:
+        class: DbVariables
+        ui.advisory.enabled: true
+        ui.advisory.color: orange
+        ui.advisory.text: This device is managed via automation.
+      admin:
+        class: User
+        shell: bash
+        userType: regular
+  post_onboard_enabled: true
+  post_onboard_commands:
+    - "echo 'curl -s http://monitors.internal.local/rebooted' >> /config/startup"
