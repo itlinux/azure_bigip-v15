@@ -10,8 +10,7 @@ resource "azurerm_linux_virtual_machine" "virtualmachine" {
   resource_group_name             = azurerm_resource_group.azmain.name
   size                            = var.specs[terraform.workspace]["instance_type"]
   disable_password_authentication = false
-
-
+  custom_data                     = base64encode(data.template_file.vm_onboard.rendered)
   network_interface_ids = [
     element(azurerm_network_interface.Management.*.id, count.index),
     element(azurerm_network_interface.Untrust.*.id, count.index),
@@ -38,30 +37,24 @@ resource "azurerm_linux_virtual_machine" "virtualmachine" {
     storage_account_type = var.specs[terraform.workspace]["storage_type"]
     caching              = "ReadWrite"
   }
-
-  custom_data = base64encode(data.template_file.vm_onboard.rendered)
-
-  #SSH key push into the VM
-  admin_ssh_key {
-    username   = var.specs[terraform.workspace]["uname"]
-    public_key = file(var.public_key)
-  }
 }
-#
-# Setup Onboarding scripts
+# to te tested for removing BIG-IP from BIG-IQ
+# provisioner "local-exec" {
+#     when    = "destroy"
+#     interpreter = ["/bin/bash", "-c"]
+#     command = <<-EOF
+#     token=$(curl -k -X POST https://bigiq_ipaddress}:443/mgmt/shared/authn/login \
+#       -H "Content-Type: application/json" \
+
+### Setup Onboarding scripts
 data "template_file" "vm_onboard" {
   template = "${file("${path.module}/onboard.yml")}"
   vars = {
-    uname = var.uname
-    # replace this with a reference to the secret id
-    upassword   = random_password.dpasswrd.result
-    DO_URL      = var.DO_URL
-    AS3_URL     = var.AS3_URL
-    TS_URL      = var.TS_URL
-    libs_dir    = var.libs_dir
-    onboard_log = var.onboard_log
-    #licenseType                 = ""
-    bigip_hostname              = "mybigipbox"
+    DO_URL                      = var.DO_URL
+    AS3_URL                     = var.AS3_URL
+    TS_URL                      = var.TS_URL
+    onboard_log                 = var.onboard_log
+    bigip_hostname              = var.specs[terraform.workspace]["comp_name"]
     bigiq_license_host          = var.bigiq_ipaddress
     bigiq_license_username      = var.bigiq_user
     bigiq_license_password      = var.bigiq_pass
@@ -75,5 +68,7 @@ data "template_file" "vm_onboard" {
     default_gw                  = var.specs[terraform.workspace]["default_gw"]
     external_self_ip            = azurerm_network_interface.Trust[0].private_ip_address
     internal_self_ip            = azurerm_network_interface.Untrust[0].private_ip_address
+    bigipuser                   = var.specs[terraform.workspace]["uname"]
+    bigippass                   = random_password.dpasswrd.result
   }
 }

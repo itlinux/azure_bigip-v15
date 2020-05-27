@@ -1,5 +1,5 @@
 #cloud-config
-##bootcmd (lines 2-19) can be removed when https://github.com/F5Networks/f5-declarative-onboarding/issues/129 is resolved. 
+#bootcmd (lines 2-19) can be removed when https://github.com/F5Networks/f5-declarative-onboarding/issues/129 is resolved.
 bootcmd:
   - touch /var/tmp/bootcmd_start
   - touch /config/custom-config.sh
@@ -21,9 +21,10 @@ tmos_declared:
   enabled: true
   icontrollx_trusted_sources: false
   icontrollx_package_urls:
-    - "${DO_URL}"
-    - "${AS3_URL}"
-    - "${TS_URL}"
+    - ${DO_URL}
+    - ${AS3_URL}
+    - ${TS_URL}
+
   do_declaration:
     schemaVersion: 1.0.0
     class: Device
@@ -31,6 +32,7 @@ tmos_declared:
     label: Cloudinit Onboarding
     Common:
       class: Tenant
+      hostname: ${bigip_hostname}
       provisioningLevels:
         class: Provision
         ltm: nominal
@@ -46,7 +48,9 @@ tmos_declared:
         unitOfMeasure: ${bigiq_license_unitOfMeasure}
         hypervisor: ${bigiq_hypervisor}
         overwrite: true
-        reachable: true
+        reachable: false
+        bigIpUsername:  ${bigipuser}
+        bigIpPassword: ${bigippass}
       dnsServers:
         class: DNS
         nameServers:
@@ -59,20 +63,15 @@ tmos_declared:
           - 0.pool.ntp.org
           - 1.pool.ntp.org
           - 2.pool.ntp.org
-      default:
-        class: Route
-        gw: ${default_gw}
-        network: default
-        mtu: 1500
+      admin:
+        class: User
+        shell: bash
+        userType: regular
       dbvars:
         class: DbVariables
         ui.advisory.enabled: true
         ui.advisory.color: orange
         ui.advisory.text: This device is managed via automation.
-      admin:
-        class: User
-        shell: bash
-        userType: regular
   post_onboard_enabled: true
   post_onboard_commands:
     - "echo 'curl -s http://monitors.internal.local/rebooted' >> /config/startup"
