@@ -87,7 +87,7 @@ variable "specs" {
     }
     west = {
       location      = "southcentralus"
-      name_rg       = "rm_north_big_rg"
+      name_rg       = "rm_north2_big_rg"
       instance_type = "Standard_DS4_v2"
       environment   = "This env is using BIG-IP"
       owner         = "Remo Mattei"

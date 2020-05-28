@@ -8,6 +8,13 @@ resource "azurerm_public_ip" "pip" {
   allocation_method   = "Dynamic"
 }
 
+resource "azurerm_public_ip" "untrust_pip" {
+  count               = var.azurerm_instances
+  name                = "pip-${count.index}-Untrust"
+  location            = azurerm_resource_group.azmain.location
+  resource_group_name = azurerm_resource_group.azmain.name
+  allocation_method   = "Dynamic"
+}
 # Create the network interfaces
 resource "azurerm_network_interface" "Management" {
   depends_on          = [azurerm_subnet.Mgmt]
@@ -37,7 +44,9 @@ resource "azurerm_network_interface" "Untrust" {
   ip_configuration {
     name                          = "untrust-${count.index}-ip-0"
     subnet_id                     = azurerm_subnet.Untrust.id
-    private_ip_address_allocation = "dynamic"
+    private_ip_address_allocation = "Static"
+    private_ip_address            = var.specs[terraform.workspace]["static_ip"][1]
+    public_ip_address_id          = azurerm_public_ip.untrust_pip[count.index].id
   }
 }
 
@@ -71,4 +80,11 @@ resource "azurerm_network_interface_security_group_association" "jointogether_ne
   count                     = var.azurerm_instances
   network_interface_id      = element(azurerm_network_interface.Management.*.id, count.index)
   network_security_group_id = element(azurerm_network_security_group.security_gr.*.id, count.index)
+}
+
+# Untrust Network
+resource "azurerm_network_interface_security_group_association" "Untrust-security" {
+  count                     = var.azurerm_instances
+  network_interface_id      = azurerm_network_interface.Untrust[count.index].id
+  network_security_group_id = azurerm_network_security_group.application_sg.id
 }
