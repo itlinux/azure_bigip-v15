@@ -15,6 +15,14 @@ resource "azurerm_public_ip" "untrust_pip" {
   resource_group_name = azurerm_resource_group.azmain.name
   allocation_method   = "Dynamic"
 }
+resource "azurerm_public_ip" "untrust_pip_sec" {
+  count               = var.azurerm_instances
+  name                = "pip-${count.index}-Untrust_sec"
+  location            = azurerm_resource_group.azmain.location
+  resource_group_name = azurerm_resource_group.azmain.name
+  allocation_method   = "Dynamic"
+}
+
 # Create the network interfaces
 resource "azurerm_network_interface" "Management" {
   depends_on          = [azurerm_subnet.Mgmt]
@@ -47,6 +55,14 @@ resource "azurerm_network_interface" "Untrust" {
     private_ip_address_allocation = "Static"
     private_ip_address            = var.specs[terraform.workspace]["static_ip"][1]
     public_ip_address_id          = azurerm_public_ip.untrust_pip[count.index].id
+    primary                       = true
+  }
+  ip_configuration {
+    name                          = "untrust-${count.index}-ip-1"
+    subnet_id                     = azurerm_subnet.Untrust.id
+    private_ip_address_allocation = "Static"
+    private_ip_address            = var.specs[terraform.workspace]["static_sec_ip"][1]
+    public_ip_address_id          = azurerm_public_ip.untrust_pip_sec[count.index].id
   }
 }
 

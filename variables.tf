@@ -33,6 +33,9 @@ variable "hypervisor_type" {
 variable "lic_pool" {
   default = "MSP-LOADv4-LIC"
 }
+# Secondary IP awareness
+# If you are using the Azure LB and have DSR enabled on the load balancing rule (on the ALB), then all you need is a primary IP on the untrust...there is no need for secondary IP address.
+
 variable "specs" {
   default = {
     default = {
@@ -58,6 +61,7 @@ variable "specs" {
       comp_name     = "bigip-14.f5.com"
       default_gw    = "10.0.30.1"
       static_ip     = ["10.0.10.4", "10.0.20.4", "10.0.30.5"]
+      static_sec_ip = ["10.0.110.5", "10.0.120.5", "10.0.130.6"]
       uname         = "azureuser"
     }
     europe = {
@@ -83,6 +87,7 @@ variable "specs" {
       default_gw    = "10.0.60.1"
       comp_name     = "mybigip.f5.com"
       static_ip     = ["10.0.40.4", "10.0.50.4", "10.0.60.5"]
+      static_sec_ip = ["10.0.110.5", "10.0.120.5", "10.0.130.6"]
       uname         = "azureuser"
     }
     west = {
@@ -108,6 +113,7 @@ variable "specs" {
       default_gw    = "10.0.120.1"
       comp_name     = "mybigip.f5.com"
       static_ip     = ["10.0.110.4", "10.0.120.4", "10.0.130.5"]
+      static_sec_ip = ["10.0.110.5", "10.0.120.5", "10.0.130.6"]
       uname         = "azureuser"
     }
     central = {
@@ -133,6 +139,7 @@ variable "specs" {
       default_gw    = "10.0.2.1"
       comp_name     = "mybigip.f5.com"
       static_ip     = ["10.0.1.4", "10.0.2.4", "10.0.3.5"]
+      static_sec_ip = ["10.0.110.5", "10.0.120.5", "10.0.130.6"]
       uname         = "azureuser"
     }
   }
