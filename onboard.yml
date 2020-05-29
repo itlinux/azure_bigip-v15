@@ -72,6 +72,30 @@ tmos_declared:
         ui.advisory.enabled: true
         ui.advisory.color: orange
         ui.advisory.text: This device is managed via automation.
+      internal:
+        class: VLAN
+        mtu: 1450
+        interfaces:
+          - name: 1.1
+            tagged: false
+      internal-self:
+        class: SelfIp
+        address: "${internal_ip}/24"
+        vlan: internal
+        allowService: default
+        trafficGroup: traffic-group-local-only
+      external:
+        class: VLAN
+        mtu: 1450
+        interfaces:
+          - name: 1.2
+            tagged: false
+      external-self:
+        class: SelfIp
+        address: "${external_ip}/24"
+        vlan: external
+        allowService: none
+        trafficGroup: traffic-group-local-only
   post_onboard_enabled: true
   post_onboard_commands:
     - "echo 'curl -s http://monitors.internal.local/rebooted' >> /config/startup"

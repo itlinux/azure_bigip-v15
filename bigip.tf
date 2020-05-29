@@ -66,8 +66,8 @@ data "template_file" "vm_onboard" {
     name_servers                = var.dnsresolvers
     search_domain               = var.searchdomain
     default_gw                  = var.specs[terraform.workspace]["default_gw"]
-    external_self_ip            = azurerm_network_interface.Trust[0].private_ip_address
-    internal_self_ip            = azurerm_network_interface.Untrust[0].private_ip_address
+    external_ip                 = azurerm_network_interface.Untrust[0].private_ip_address
+    internal_ip                 = azurerm_network_interface.Trust[0].private_ip_address
     bigipuser                   = var.specs[terraform.workspace]["uname"]
     bigippass                   = random_password.dpasswrd.result
   }
