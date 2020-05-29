@@ -76,7 +76,7 @@ tmos_declared:
         class: VLAN
         mtu: 1450
         interfaces:
-          - name: 1.1
+          - name: 1.2
             tagged: false
       internal-self:
         class: SelfIp
@@ -88,7 +88,7 @@ tmos_declared:
         class: VLAN
         mtu: 1450
         interfaces:
-          - name: 1.2
+          - name: 1.1
             tagged: false
       external-self:
         class: SelfIp
@@ -96,6 +96,11 @@ tmos_declared:
         vlan: external
         allowService: none
         trafficGroup: traffic-group-local-only
+      default:
+        class: Route
+        gw: "${default_gw}"
+        network: default
+        mtu: 1500
   post_onboard_enabled: true
   post_onboard_commands:
     - "echo 'curl -s http://monitors.internal.local/rebooted' >> /config/startup"

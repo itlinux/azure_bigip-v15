@@ -105,7 +105,7 @@ variable "specs" {
       trust         = ["10.0.110.0/24"]
       untrust       = ["10.0.120.0/24"]
       mgmt          = ["10.0.130.0/24"]
-      default_gw    = "10.0.130.1"
+      default_gw    = "10.0.120.1"
       comp_name     = "mybigip.f5.com"
       static_ip     = ["10.0.110.4", "10.0.120.4", "10.0.130.5"]
       uname         = "azureuser"
@@ -130,7 +130,7 @@ variable "specs" {
       trust         = ["10.0.1.0/24"]
       untrust       = ["10.0.2.0/24"]
       mgmt          = ["10.0.3.0/24"]
-      default_gw    = "10.0.3.1"
+      default_gw    = "10.0.2.1"
       comp_name     = "mybigip.f5.com"
       static_ip     = ["10.0.1.4", "10.0.2.4", "10.0.3.5"]
       uname         = "azureuser"
