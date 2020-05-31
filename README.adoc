@@ -153,5 +153,29 @@ https://IPADRESS
 
 DONE!!
 
+== BIG-IQ License
+It will get a license from the BIG-IQ. Check your BIG-IQ to make sure your BIG-IP has a license
+
+
+
+== Ansible
+Terraform will gen the variables for ansible to run. The ansible will set the following:
+
+POOL
+NODE
+Virtual Server IP
+The playbook will use the secondary IP of the Untrust NIC, if you use the Azure LB you will to use the primary NIC and not the secondary.
+
 == TO DO
-license the BIG-IP, set a testing for BIG-IP. This terraform will just deploy it, for now.
+Ansible Playbook to be tuned to remove services.
+
+
+== Troubleshooting
+Login in to the BIG-IP and check the following files in the /var/log folder:
+
+====
+cloud-init.log
+cloud-init-output.log
+f5-cloud-init.log
+====
+
