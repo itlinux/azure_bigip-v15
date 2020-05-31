@@ -25,6 +25,11 @@ resource "azurerm_public_ip" "untrust_pip_sec" {
   allocation_method   = "Dynamic"
 }
 
+data "azurerm_public_ip" "untrust_pip_sec" {
+  name                = azurerm_public_ip.untrust_pip_sec[0].name
+  resource_group_name = azurerm_linux_virtual_machine.virtualmachine[0].resource_group_name
+}
+
 # Create the network interfaces
 resource "azurerm_network_interface" "Management" {
   depends_on          = [azurerm_subnet.Mgmt]
@@ -67,6 +72,7 @@ resource "azurerm_network_interface" "Untrust" {
     public_ip_address_id          = azurerm_public_ip.untrust_pip_sec[count.index].id
   }
 }
+
 
 # Create the network interfaces
 resource "azurerm_network_interface" "Trust" {

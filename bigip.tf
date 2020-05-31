@@ -79,6 +79,7 @@ data "template_file" "ansible_info" {
     mgmt     = azurerm_linux_virtual_machine.virtualmachine[0].public_ip_address,
     username = var.specs[terraform.workspace]["uname"]
     pwd      = random_password.dpasswrd.result
+    priv_ip  = azurerm_network_interface.Untrust[0].ip_configuration[1].private_ip_address
   }
 }
 

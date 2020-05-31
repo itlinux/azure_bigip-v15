@@ -4,7 +4,7 @@ provider:
       user: ${username}
       validate_certs: false
       server_port: 443
-dst_server: 10.0.120.5
+dst_server: ${priv_ip}
 dst_name: "virtual-server"
 partition_to_use: Common
 snat_option: automap
