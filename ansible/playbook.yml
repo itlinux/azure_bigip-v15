@@ -1,0 +1,57 @@
+# Author Remo Mattei
+# Email: rm@rm.ht
+---
+- hosts: localhost
+  connection: local
+  vars_files:
+  - creds.yml
+  tasks:
+    - name: Create a pool
+      bigip_pool:
+        state: "{{ present_state }}"
+        provider: "{{ provider }}"
+        lb_method: "{{ lb_type }}"
+        name: "{{ pool_name }}"
+        slow_ramp_time: 60
+        monitors:
+          - http
+      delegate_to: localhost
+      tags:
+        - f5_pool
+    - name: Add members to pool
+      bigip_pool_member:
+        provider: "{{ provider }}"
+        description: "webserver {{ item.name }}"
+        host: "{{ item.host }}"
+        name: "{{ item.name }}"
+        pool: "{{ pool_name }}"
+        port: 80
+        state: "{{ present_state }}"
+      with_items:
+        - host: "{{ host1 }}"
+          name: web01
+        - host: "{{ host2 }}"
+          name: web02
+      delegate_to: localhost
+      tags:
+        - f5_member
+    - name: Add virtual server
+      bigip_virtual_server:
+        state: "{{ present_state }}"
+        partition: "{{ partition_to_use }}"
+        name: "{{ dst_name }}"
+        destination: "{{ dst_server }}"
+        port: 80
+        pool: "{{ pool_name }}"
+        snat: "{{snat_option}}"
+        description: Test Virtual Server
+        profiles:
+          - http
+        provider:
+          server: "{{ provider.server }}"
+          user: "{{ provider.user }}"
+          password: "{{ provider.password }}"
+          validate_certs: "{{ cert_status }}"
+      delegate_to: localhost
+      tags:
+        - f5_vs

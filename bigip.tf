@@ -11,6 +11,7 @@ resource "azurerm_linux_virtual_machine" "virtualmachine" {
   size                            = var.specs[terraform.workspace]["instance_type"]
   disable_password_authentication = false
   custom_data                     = base64encode(data.template_file.vm_onboard.rendered)
+  depends_on                      = [azurerm_virtual_network.virtual_net, azurerm_public_ip.pip]
   network_interface_ids = [
     element(azurerm_network_interface.Management.*.id, count.index),
     element(azurerm_network_interface.Untrust.*.id, count.index),
@@ -71,4 +72,17 @@ data "template_file" "vm_onboard" {
     bigipuser                   = var.specs[terraform.workspace]["uname"]
     bigippass                   = random_password.dpasswrd.result
   }
+}
+data "template_file" "ansible_info" {
+  template = "${file("./ansible/bigip.txt")}"
+  vars = {
+    mgmt     = azurerm_linux_virtual_machine.virtualmachine[0].public_ip_address,
+    username = var.specs[terraform.workspace]["uname"]
+    pwd      = random_password.dpasswrd.result
+  }
+}
+
+resource "local_file" "creds_playbook" {
+  content  = data.template_file.ansible_info.rendered
+  filename = "./ansible/creds.yml"
 }

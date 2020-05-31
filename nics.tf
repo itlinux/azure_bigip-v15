@@ -9,6 +9,7 @@ resource "azurerm_public_ip" "pip" {
 }
 
 resource "azurerm_public_ip" "untrust_pip" {
+  depends_on          = [azurerm_virtual_network.virtual_net]
   count               = var.azurerm_instances
   name                = "pip-${count.index}-Untrust"
   location            = azurerm_resource_group.azmain.location
@@ -16,6 +17,7 @@ resource "azurerm_public_ip" "untrust_pip" {
   allocation_method   = "Dynamic"
 }
 resource "azurerm_public_ip" "untrust_pip_sec" {
+  depends_on          = [azurerm_virtual_network.virtual_net]
   count               = var.azurerm_instances
   name                = "pip-${count.index}-Untrust_sec"
   location            = azurerm_resource_group.azmain.location

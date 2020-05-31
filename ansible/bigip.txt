@@ -1,0 +1,18 @@
+provider:
+      password: ${pwd}
+      server: ${mgmt}
+      user: ${username}
+      validate_certs: false
+      server_port: 443
+dst_server: 10.0.120.5
+dst_name: "virtual-server"
+partition_to_use: Common
+snat_option: automap
+present_state: present
+pool_name: web
+lb_type: fastest-app-response
+host1: 52.175.223.65
+host2: 52.191.186.245
+cert_status: false
+
+
