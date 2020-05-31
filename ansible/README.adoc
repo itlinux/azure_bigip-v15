@@ -1,0 +1,5 @@
+= Ansible Template
+
+The template file is called bigip.txt check the options, it will generate a file called creds.yml
+
+
