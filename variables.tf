@@ -44,14 +44,14 @@ variable "specs" {
       instance_type = "Standard_DS3_v2"
       environment   = "This env is using BIG-IP"
       owner         = "Remo Mattei"
-      f5version     = "15.0.103000" # "14.1.203001"
+      f5version     = "15.1.002000" # "14.1.203001"
       plan_name     = "f5-big-ltm-1slot-byol"
       offer         = "f5-big-ip-byol"
       product       = "f5-big-ip-byol"
       publisher     = "f5-networks"
       sku           = "f5-big-ltm-1slot-byol"
       skukey1       = "LTM"
-      skukey2       = "5G"
+      skukey2       = "10G"
       unitofMeasure = "yearly"
       storage_type  = "Premium_LRS"
       virtualnet    = ["10.0.0.0/16"]
@@ -59,9 +59,9 @@ variable "specs" {
       untrust       = ["10.0.20.0/24"]
       mgmt          = ["10.0.30.0/24"]
       comp_name     = "bigip-14.f5.com"
-      default_gw    = "10.0.30.1"
+      default_gw    = "10.0.20.1"
       static_ip     = ["10.0.10.4", "10.0.20.4", "10.0.30.5"]
-      static_sec_ip = ["10.0.110.5", "10.0.120.5", "10.0.130.6"]
+      static_sec_ip = ["10.0.10.5", "10.0.20.5", "10.0.30.6"]
       uname         = "azureuser"
     }
     europe = {
@@ -70,7 +70,7 @@ variable "specs" {
       instance_type = "Standard_DS3_v2"
       environment   = "This env is using BIG-IP"
       owner         = "Remo Mattei"
-      f5version     = "14.1.203001"
+      f5version     = "15.1.002000"
       plan_name     = "f5-big-ltm-1slot-byol"
       offer         = "f5-big-ip-byol"
       product       = "f5-big-ip-byol"
@@ -84,15 +84,15 @@ variable "specs" {
       trust         = ["10.0.40.0/24"]
       untrust       = ["10.0.50.0/24"]
       mgmt          = ["10.0.60.0/24"]
-      default_gw    = "10.0.60.1"
+      default_gw    = "10.0.50.1"
       comp_name     = "mybigip.f5.com"
       static_ip     = ["10.0.40.4", "10.0.50.4", "10.0.60.5"]
-      static_sec_ip = ["10.0.110.5", "10.0.120.5", "10.0.130.6"]
+      static_sec_ip = ["10.0.40.5", "10.0.50.5", "10.0.60.6"]
       uname         = "azureuser"
     }
     west = {
       location      = "southcentralus"
-      name_rg       = "rm_north2_big_rg"
+      name_rg       = "rm_southcentral_bigip_rg"
       instance_type = "Standard_DS4_v2"
       environment   = "This env is using BIG-IP"
       owner         = "Remo Mattei"
@@ -139,7 +139,7 @@ variable "specs" {
       default_gw    = "10.0.2.1"
       comp_name     = "mybigip.f5.com"
       static_ip     = ["10.0.1.4", "10.0.2.4", "10.0.3.5"]
-      static_sec_ip = ["10.0.110.5", "10.0.120.5", "10.0.130.6"]
+      static_sec_ip = ["10.0.1.5", "10.0.2.5", "10.0.3.6"]
       uname         = "azureuser"
     }
   }
