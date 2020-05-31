@@ -175,7 +175,8 @@ Login in to the BIG-IP and check the following files in the /var/log folder:
 
 ====
 cloud-init.log
+
 cloud-init-output.log
+
 f5-cloud-init.log
 ====
-
