@@ -1,22 +1,31 @@
 #cloud-config
-#bootcmd (lines 2-19) can be removed when https://github.com/F5Networks/f5-declarative-onboarding/issues/129 is resolved.
-bootcmd:
-  - touch /var/tmp/bootcmd_start
-  - touch /config/custom-config.sh
-  - echo "#!/bin/bash" >> /config/custom-config.sh
-  - echo "touch /var/tmp/write_files_start" >> /config/custom-config.sh
-  - echo "# Wait for MCPD to be up before running tmsh commands" >> /config/custom-config.sh
-  - echo "source /usr/lib/bigstart/bigip-ready-functions" >> /config/custom-config.sh
-  - echo "wait_bigip_ready" >> /config/custom-config.sh
-  - echo "sleep 30" >> /config/custom-config.sh
-  - echo "touch /var/tmp/custom_done" >> /config/custom-config.sh
-  - echo "# Begin BIG-IP configuration" >> /config/custom-config.sh
-  - echo "tmsh modify sys global-settings mgmt-dhcp disabled" >> /config/custom-config.sh
-  - echo "tmsh save /sys config" >> /config/custom-config.sh
-  - chmod +x /config/custom-config.sh
-  - /config/custom-config.sh
-  - touch /var/tmp/bootcmd_end
-#cloud-config
+write_files:
+- content: |
+    #!/bin/bash
+
+      echo "This is installation is done with cloud-init configured by remo@f5.com" >> /var/tmp/cloud-init-output
+
+    # Wait for MCPD to be up before running tmsh commands
+      source /usr/lib/bigstart/bigip-ready-functions
+      wait_bigip_ready
+
+        #  Begin BIG-IP configuration
+        tmsh modify /sys global-settings mgmt-dhcp disabled
+        tmsh modify /sys global-settings gui-setup disabled
+        tmsh modify /sys sshd banner enabled banner-text 'Configured via Automation. All Sessions will be recorded!'
+        tmsh modify /sys global-settings gui-security-banner-text 'Configured via Automation!'
+        tmsh save /sys config
+
+  path: /config/custom-config.sh
+  permissions: '0755'
+  owner: root:root
+  append: true
+- content:
+    path: /var/tmp/bootcmd_end
+    owner: root:root
+    permissions: '0644'
+runcmd:
+  - /config/custom-config.sh &
 tmos_declared:
   enabled: true
   icontrollx_trusted_sources: false
@@ -24,6 +33,7 @@ tmos_declared:
     - ${DO_URL}
     - ${AS3_URL}
     - ${TS_URL}
+    - ${FAST_URL}
 
   do_declaration:
     schemaVersion: 1.0.0

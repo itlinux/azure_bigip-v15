@@ -1,0 +1,43 @@
+# Author Remo Mattei
+# Email: rm@rm.ht
+---
+- hosts: localhost
+  connection: local
+  vars_files:
+  - creds.yml
+  tasks:
+    - name: Create client SSL profile
+      bigip_profile_client_ssl:
+        state: "{{ present_state }}"
+        name: remo_profile
+        provider:
+          server: "{{ provider.server }}"
+          user: "{{ provider.user }}"
+          password: "{{ provider.password }}"
+          validate_certs: false
+      delegate_to: localhost
+      tags:
+        - ssl_profile
+    - name: Add HTTPS virtual server
+      bigip_virtual_server:
+        state: "{{ present_state }}"
+        partition: "{{ partition_to_use }}"
+        name: virtual-server-ssl
+        destination: "{{ dst_server }}"
+        port: 443
+        pool: "{{ pool_name }}"
+        snat: Automap
+        description: HTTPS Virtual Server
+        profiles:
+          - http
+          - name: remo_profile
+            context: client-side
+        enabled_vlans:
+        provider:
+          server: "{{ provider.server }}"
+          user: "{{ provider.user }}"
+          password: "{{ provider.password }}"
+          validate_certs: false
+      delegate_to: localhost
+      tags:
+        - ssl_vs

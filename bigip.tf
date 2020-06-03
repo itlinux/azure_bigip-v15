@@ -54,6 +54,7 @@ data "template_file" "vm_onboard" {
     DO_URL                      = var.DO_URL
     AS3_URL                     = var.AS3_URL
     TS_URL                      = var.TS_URL
+    FAST_URL                    = var.FAST_URL
     onboard_log                 = var.onboard_log
     bigip_hostname              = var.specs[terraform.workspace]["comp_name"]
     bigiq_license_host          = var.bigiq_ipaddress
