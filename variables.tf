@@ -58,7 +58,7 @@ variable "specs" {
       trust         = ["10.0.10.0/24"]
       untrust       = ["10.0.20.0/24"]
       mgmt          = ["10.0.30.0/24"]
-      comp_name     = "bigip-14.f5.com"
+      comp_name     = "bigip15.f5.com"
       default_gw    = "10.0.20.1"
       static_ip     = ["10.0.10.4", "10.0.20.4", "10.0.30.5"]
       static_sec_ip = ["10.0.10.5", "10.0.20.5", "10.0.30.6"]
