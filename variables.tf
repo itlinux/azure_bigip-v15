@@ -122,7 +122,7 @@ variable "specs" {
       instance_type = "Standard_DS3_v2"
       environment   = "This env is using BIG-IP"
       owner         = "Remo Mattei"
-      f5version     = "14.1.203001"
+      f5version     = "15.1.002000"
       plan_name     = "f5-big-ltm-1slot-byol"
       offer         = "f5-big-ip-byol"
       product       = "f5-big-ip-byol"
