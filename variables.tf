@@ -22,7 +22,7 @@ variable "bigiq_ipaddress" {
   default = "23.102.174.99"
 }
 variable "bigiq_user" {
-  default = "admin"
+  default = "msft"
 }
 # this variable is set in terraform.tfvars
 variable "bigiq_pass" {

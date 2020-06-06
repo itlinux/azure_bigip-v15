@@ -43,7 +43,7 @@
         destination: "{{ dst_server }}"
         port: 80
         pool: "{{ pool_name }}"
-        snat: "{{snat_option}}"
+        snat: "{{ snat_option }}"
         description: Test Virtual Server
         profiles:
           - http
