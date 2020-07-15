@@ -55,6 +55,7 @@ resource "azurerm_network_interface" "Untrust" {
   location             = azurerm_resource_group.azmain.location
   resource_group_name  = azurerm_resource_group.azmain.name
   enable_ip_forwarding = true
+  enable_accelerated_networking = true
 
   ip_configuration {
     name                          = "untrust-${count.index}-ip-0"
@@ -82,6 +83,7 @@ resource "azurerm_network_interface" "Trust" {
   location             = azurerm_resource_group.azmain.location
   resource_group_name  = azurerm_resource_group.azmain.name
   enable_ip_forwarding = true
+  enable_accelerated_networking = true
 
   ip_configuration {
     name                          = "nic-${count.index}-ip-0"
