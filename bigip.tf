@@ -37,6 +37,7 @@ resource "azurerm_linux_virtual_machine" "virtualmachine" {
     name                 = "${var.prefix}-osdisk-${count.index}"
     storage_account_type = var.specs[terraform.workspace]["storage_type"]
     caching              = "ReadWrite"
+    disk_size_gb         = "100"
   }
 }
 # to te tested for removing BIG-IP from BIG-IQ
