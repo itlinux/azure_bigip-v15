@@ -13,8 +13,8 @@
         lb_method: "{{ lb_type }}"
         name: "{{ pool_name }}"
         slow_ramp_time: 60
-        monitors:
-          - http
+        #monitors:
+        #  - http
       delegate_to: localhost
       tags:
         - f5_pool
