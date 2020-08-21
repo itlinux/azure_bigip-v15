@@ -19,7 +19,7 @@ variable "dnsresolvers" {
   default = "168.63.129.16"
 }
 variable "bigiq_ipaddress" {
-  default = "23.102.174.99"
+  default = "52.183.125.34"
 }
 variable "bigiq_user" {
   default = "admin"
@@ -40,7 +40,7 @@ variable "specs" {
   default = {
     default = {
       location      = "westus2"
-      name_rg       = "rm_bigip_rg"
+      name_rg       = "remo_bigip_rg"
       instance_type = "Standard_DS3_v2"
       environment   = "This env is using BIG-IP"
       owner         = "Remo Mattei"
