@@ -26,6 +26,7 @@ resource "azurerm_public_ip" "untrust_pip_sec" {
 }
 
 data "azurerm_public_ip" "untrust_pip_sec" {
+  depends_on          = [azurerm_virtual_network.virtual_net]
   name                = azurerm_public_ip.untrust_pip_sec[0].name
   resource_group_name = azurerm_linux_virtual_machine.virtualmachine[0].resource_group_name
 }
