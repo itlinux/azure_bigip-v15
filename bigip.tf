@@ -49,6 +49,7 @@ resource "azurerm_linux_virtual_machine" "virtualmachine" {
 
 ### Setup Onboarding scripts
 data "template_file" "vm_onboard" {
+  depends_on = [azurerm_network_interface.Untrust, azurerm_network_interface.Trust]
   template = "${file("${path.module}/onboard.yml")}"
   vars = {
     DO_URL                      = var.DO_URL
@@ -75,6 +76,7 @@ data "template_file" "vm_onboard" {
   }
 }
 data "template_file" "ansible_info" {
+  depends_on = [azurerm_linux_virtual_machine.virtualmachine]
   template = "${file("./ansible/bigip.txt")}"
   vars = {
     mgmt     = azurerm_linux_virtual_machine.virtualmachine[0].public_ip_address,
