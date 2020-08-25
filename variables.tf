@@ -19,7 +19,7 @@ variable "dnsresolvers" {
   default = "168.63.129.16"
 }
 variable "bigiq_ipaddress" {
-  default = "52.183.125.34"
+  default = "23.102.174.99"
 }
 variable "bigiq_user" {
   default = "admin"
@@ -45,11 +45,11 @@ variable "specs" {
       environment   = "This env is using BIG-IP"
       owner         = "Remo Mattei"
       f5version     = "15.1.004000"
-      plan_name     = "f5-big-ltm-1slot-byol"
+      plan_name     = "f5-big-ltm-2slot-byol"
       offer         = "f5-big-ip-byol"
       product       = "f5-big-ip-byol"
       publisher     = "f5-networks"
-      sku           = "f5-big-ltm-1slot-byol"
+      sku           = "f5-big-ltm-2slot-byol"
       skukey1       = "LTM"
       skukey2       = "10G"
       unitofMeasure = "yearly"
