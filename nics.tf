@@ -26,6 +26,7 @@ resource "azurerm_public_ip" "untrust_pip_sec" {
 }
 
 data "azurerm_public_ip" "untrust_pip_sec" {
+  depends_on          = [azurerm_virtual_network.virtual_net]
   name                = azurerm_public_ip.untrust_pip_sec[0].name
   resource_group_name = azurerm_linux_virtual_machine.virtualmachine[0].resource_group_name
 }
@@ -55,6 +56,7 @@ resource "azurerm_network_interface" "Untrust" {
   location             = azurerm_resource_group.azmain.location
   resource_group_name  = azurerm_resource_group.azmain.name
   enable_ip_forwarding = true
+# this option enable_accelerated_networking will only work with specific Images version. DS4 is one of them
   enable_accelerated_networking = true
 
   ip_configuration {
