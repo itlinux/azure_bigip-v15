@@ -40,7 +40,7 @@ variable "specs" {
   default = {
     default = {
       location      = "westus2"
-      name_rg       = "ansi_rm_bigip_rg"
+      name_rg       = "main_bigip_rg"
       instance_type = "Standard_DS4_v2"
       environment   = "This env is using BIG-IP"
       owner         = "Remo Mattei"
