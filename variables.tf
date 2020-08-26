@@ -19,11 +19,8 @@ variable "dnsresolvers" {
   default = "168.63.129.16"
 }
 variable "bigiq_ipaddress" {
-  default = "52.183.125.34"
+  default = "23.102.174.99"
 }
-# variable "bigiq_ipaddress" {
-#   default = "23.102.174.99"
-# }
 variable "bigiq_user" {
   default = "admin"
 }
@@ -47,7 +44,7 @@ variable "specs" {
       instance_type = "Standard_DS5_v2"
       environment   = "This env is using BIG-IP"
       owner         = "Remo Mattei"
-      f5version     = "15.1.004000" # "14.1.203001"
+      f5version     = "15.1.004000"
       location      = "westus2"
       name_rg       = "main_bigip_rg"
       instance_type = "Standard_DS4_v2"
