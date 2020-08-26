@@ -56,6 +56,7 @@ resource "azurerm_network_interface" "Untrust" {
   location             = azurerm_resource_group.azmain.location
   resource_group_name  = azurerm_resource_group.azmain.name
   enable_ip_forwarding = true
+# this option enable_accelerated_networking will only work with specific Images version. DS4 is one of them
   enable_accelerated_networking = true
 
   ip_configuration {
