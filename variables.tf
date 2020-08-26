@@ -5,7 +5,7 @@ variable "uname" {
   default = "remo"
 }
 variable "prefix" {
-  default = "remo"
+  default = "msdemo"
 }
 variable "network_name" {
   default = "bigip_network"
@@ -19,8 +19,11 @@ variable "dnsresolvers" {
   default = "168.63.129.16"
 }
 variable "bigiq_ipaddress" {
-  default = "23.102.174.99"
+  default = "52.183.125.34"
 }
+# variable "bigiq_ipaddress" {
+#   default = "23.102.174.99"
+# }
 variable "bigiq_user" {
   default = "admin"
 }
@@ -39,6 +42,12 @@ variable "lic_pool" {
 variable "specs" {
   default = {
     default = {
+      location      = "westus"
+      name_rg       = "msft_demo_westus_bigip_rg"
+      instance_type = "Standard_DS5_v2"
+      environment   = "This env is using BIG-IP"
+      owner         = "Remo Mattei"
+      f5version     = "15.1.004000" # "14.1.203001"
       location      = "westus2"
       name_rg       = "main_bigip_rg"
       instance_type = "Standard_DS4_v2"
@@ -57,11 +66,11 @@ variable "specs" {
       virtualnet    = ["10.0.0.0/16"]
       trust         = ["10.0.10.0/24"]
       untrust       = ["10.0.20.0/24"]
-      mgmt          = ["10.0.30.0/24"]
-      comp_name     = "bigip15.f5.com"
+      mgmt          = ["10.0.40.0/24"]
+      comp_name     = "bigip15-msdemo.f5.com"
       default_gw    = "10.0.20.1"
-      static_ip     = ["10.0.10.4", "10.0.20.4", "10.0.30.5"]
-      static_sec_ip = ["10.0.10.5", "10.0.20.5", "10.0.30.6"]
+      static_ip     = ["10.0.10.4", "10.0.20.4", "10.0.40.5"]
+      static_sec_ip = ["10.0.10.5", "10.0.20.5", "10.0.40.6"]
       uname         = "azureuser"
     }
     europe = {
@@ -85,7 +94,7 @@ variable "specs" {
       untrust       = ["10.0.50.0/24"]
       mgmt          = ["10.0.60.0/24"]
       default_gw    = "10.0.50.1"
-      comp_name     = "mybigip.f5.com"
+      comp_name     = "mybigip-msdemo.f5.com"
       static_ip     = ["10.0.40.4", "10.0.50.4", "10.0.60.5"]
       static_sec_ip = ["10.0.40.5", "10.0.50.5", "10.0.60.6"]
       uname         = "azureuser"
@@ -118,7 +127,7 @@ variable "specs" {
     }
     central = {
       location      = "southcentralus"
-      name_rg       = "centralus_rg"
+      name_rg       = "msdemo_centralus_rg"
       instance_type = "Standard_DS3_v2"
       environment   = "This env is using BIG-IP"
       owner         = "Remo Mattei"
@@ -137,7 +146,7 @@ variable "specs" {
       untrust       = ["10.0.2.0/24"]
       mgmt          = ["10.0.3.0/24"]
       default_gw    = "10.0.2.1"
-      comp_name     = "mybigip.f5.com"
+      comp_name     = "msdemo.f5.com"
       static_ip     = ["10.0.1.4", "10.0.2.4", "10.0.3.5"]
       static_sec_ip = ["10.0.1.5", "10.0.2.5", "10.0.3.6"]
       uname         = "azureuser"

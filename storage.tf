@@ -1,7 +1,7 @@
 # Random ID for the Storage
 resource "random_id" "storage_account" {
   prefix      = "storage"
-  byte_length = "2"
+  byte_length = "3"
 }
 
 # Create the storage account
