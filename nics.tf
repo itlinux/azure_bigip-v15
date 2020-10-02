@@ -9,7 +9,7 @@ resource "azurerm_public_ip" "pip" {
   sku                 = "Standard" # the Standard sku is required due to the use of availability zones
   domain_name_label   = "${var.specs[terraform.workspace]["fqdn_name"]}${count.index}"
   #domain_name_label   = var.specs[terraform.workspace]["fqdn_name"]
-  zones               = [element(local.azs, count.index)]
+  zones = [element(local.azs, count.index)]
 }
 
 resource "azurerm_public_ip" "untrust_pip" {
@@ -53,7 +53,7 @@ data "azurerm_public_ip" "untrust_pip_sec" {
 #
 # Create the network interfaces
 resource "azurerm_network_interface" "Management" {
-  depends_on           = [azurerm_virtual_network.virtual_net]
+  depends_on          = [azurerm_virtual_network.virtual_net]
   count               = var.specs[terraform.workspace]["instance_count"]
   name                = "nic-${count.index}-mgmt"
   location            = azurerm_resource_group.azmain.location
@@ -86,8 +86,8 @@ resource "azurerm_network_interface" "Untrust" {
     #private_ip_address_allocation = "Static"
     #private_ip_address            = var.specs[terraform.workspace]["static_ip"][1]
     #private_ip_address            = var.specs[terraform.workspace]["static_ip"]
-    public_ip_address_id          = azurerm_public_ip.untrust_pip[count.index].id
-    primary                       = true
+    public_ip_address_id = azurerm_public_ip.untrust_pip[count.index].id
+    primary              = true
   }
   ip_configuration {
     name                          = "untrust-${count.index}-ip-1"
@@ -96,7 +96,7 @@ resource "azurerm_network_interface" "Untrust" {
     #private_ip_address_allocation = "Static"
     # private_ip_address            = var.specs[terraform.workspace]["static_sec_ip"][1]
     #private_ip_address            = var.specs[terraform.workspace]["static_sec_ip"]
-    public_ip_address_id          = azurerm_public_ip.untrust_pip_sec[count.index].id
+    public_ip_address_id = azurerm_public_ip.untrust_pip_sec[count.index].id
   }
 }
 
@@ -104,7 +104,7 @@ resource "azurerm_network_interface" "Untrust" {
 # Create the network interfaces
 resource "azurerm_network_interface" "Trust" {
   depends_on                    = [azurerm_virtual_network.virtual_net]
-  count                         = var.specs[terraform.workspace]["instance_count"] 
+  count                         = var.specs[terraform.workspace]["instance_count"]
   name                          = "nic-${count.index}-trust"
   location                      = azurerm_resource_group.azmain.location
   resource_group_name           = azurerm_resource_group.azmain.name

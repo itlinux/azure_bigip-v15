@@ -15,5 +15,5 @@ resource "random_password" "dpasswrd" {
 }
 
 resource "random_id" "randomId" {
-    byte_length = 2
+  byte_length = 2
 }

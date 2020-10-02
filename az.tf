@@ -1,3 +1,3 @@
 locals {
-  azs             = var.specs[terraform.workspace]["azs"]
+  azs = var.specs[terraform.workspace]["azs"]
 }

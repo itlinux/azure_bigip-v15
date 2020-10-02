@@ -1,6 +1,6 @@
 data "template_file" "ts_json" {
   depends_on = [data.template_file.vm_onboard]
-  count =  var.specs[terraform.workspace]["instance_count"]
+  count      = var.specs[terraform.workspace]["instance_count"]
   template   = file("${path.module}/ts.json")
 
   vars = {
@@ -10,7 +10,7 @@ data "template_file" "ts_json" {
   }
 }
 resource "null_resource" "ts_telemetry" {
-  count =  var.specs[terraform.workspace]["instance_count"]
+  count = var.specs[terraform.workspace]["instance_count"]
   provisioner "local-exec" {
     command = <<-EOT
         sleep 120

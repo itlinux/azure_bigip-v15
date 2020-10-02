@@ -64,8 +64,8 @@ variable "subnets" {
 # If you are using the Azure LB and have DSR enabled on the load balancing rule (on the ALB), then all you need is a primary IP on the untrust...there is no need for secondary IP address.
 # for the dynamic version only default variables are correct. I will need to update the other regions 
 variable "specs" {
-  default            = {
-    default          = {
+  default = {
+    default = {
       location       = "westus 2"
       name_rg        = "westus2_remo_rg"
       instance_type  = "Standard_DS5_v2"
@@ -78,7 +78,7 @@ variable "specs" {
       publisher      = "f5-networks"
       sku            = "f5-big-all-2slot-byol"
       skukey1        = "LTM"
-      instance_count = "2"
+      instance_count = "3"
       skukey2        = "10G"
       unitofMeasure  = "yearly"
       storage_type   = "Premium_LRS"

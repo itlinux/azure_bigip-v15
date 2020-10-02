@@ -41,18 +41,11 @@ resource "azurerm_linux_virtual_machine" "virtualmachine" {
     disk_size_gb         = "100"
   }
 }
-# to te tested for removing BIG-IP from BIG-IQ
-# provisioner "local-exec" {
-#     when    = "destroy"
-#     interpreter = ["/bin/bash", "-c"]
-#     command = <<-EOF
-#     token=$(curl -k -X POST https://bigiq_ipaddress}:443/mgmt/shared/authn/login \
-#       -H "Content-Type: application/json" \
 
 ### Setup Onboarding scripts
 data "template_file" "vm_onboard" {
   depends_on = [azurerm_network_interface.Untrust, azurerm_network_interface.Trust]
-  count    = var.specs[terraform.workspace]["instance_count"]
+  count      = var.specs[terraform.workspace]["instance_count"]
   template   = "${file("${path.module}/onboard.yml")}"
   vars = {
     DO_URL                      = var.DO_URL
@@ -61,7 +54,6 @@ data "template_file" "vm_onboard" {
     FAST_URL                    = var.FAST_URL
     onboard_log                 = var.onboard_log
     bigip_hostname              = "${var.specs[terraform.workspace]["fqdn_name"]}${count.index}.${var.specs[terraform.workspace]["d_name"]}"
-    #bigip_hostname              = var.specs[terraform.workspace]["comp_name"]
     bigiq_license_host          = var.bigiq_ipaddress
     bigiq_license_username      = var.bigiq_user
     bigiq_license_password      = var.bigiq_pass
@@ -72,8 +64,7 @@ data "template_file" "vm_onboard" {
     bigiq_hypervisor            = var.hypervisor_type
     name_servers                = var.dnsresolvers
     search_domain               = var.searchdomain
-    default_gw                  = cidrhost(azurerm_subnet.Untrust[count.index].address_prefix,1)
-    #default_gw                  = var.specs[terraform.workspace]["default_gw"]
+    default_gw                  = cidrhost(azurerm_subnet.Untrust[count.index].address_prefix, 1)
     external_ip                 = azurerm_network_interface.Untrust[count.index].private_ip_address
     internal_ip                 = azurerm_network_interface.Trust[count.index].private_ip_address
     bigipuser                   = var.specs[terraform.workspace]["uname"]
@@ -83,7 +74,7 @@ data "template_file" "vm_onboard" {
 }
 data "template_file" "ansible_info" {
   depends_on = [azurerm_linux_virtual_machine.virtualmachine]
-  count               = var.specs[terraform.workspace]["instance_count"]
+  count      = var.specs[terraform.workspace]["instance_count"]
   template   = "${file("./ansible/bigip.txt")}"
   vars = {
     mgmt     = azurerm_linux_virtual_machine.virtualmachine[count.index].public_ip_address,
@@ -94,7 +85,7 @@ data "template_file" "ansible_info" {
 }
 
 resource "local_file" "creds_playbook" {
-  count               = var.specs[terraform.workspace]["instance_count"]
+  count    = var.specs[terraform.workspace]["instance_count"]
   content  = data.template_file.ansible_info[count.index].rendered
   filename = "./ansible/creds${count.index}.yml"
 }
