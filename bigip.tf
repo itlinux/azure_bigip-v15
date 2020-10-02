@@ -64,7 +64,7 @@ data "template_file" "vm_onboard" {
     bigiq_hypervisor            = var.hypervisor_type
     name_servers                = var.dnsresolvers
     search_domain               = var.searchdomain
-    default_gw                  = cidrhost(azurerm_subnet.Untrust[count.index].address_prefix, 1)
+    default_gw                  = cidrhost(azurerm_subnet.Untrust[count.index % length(local.azs)].address_prefix, 1)
     external_ip                 = azurerm_network_interface.Untrust[count.index].private_ip_address
     internal_ip                 = azurerm_network_interface.Trust[count.index].private_ip_address
     bigipuser                   = var.specs[terraform.workspace]["uname"]
