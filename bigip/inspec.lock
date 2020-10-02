@@ -1,0 +1,8 @@
+---
+lockfile_version: 1
+depends:
+- name: big-ip-atc-ready
+  resolved_source:
+    git: https://github.com/F5SolutionsEngineering/big-ip-atc-ready
+    ref: '09e8b365d0c0a36270a36b56c754d4fcd068b4d0'
+  version_constraints: []

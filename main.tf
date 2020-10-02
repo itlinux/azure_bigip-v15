@@ -18,3 +18,4 @@ resource "azurerm_resource_group" "azmain" {
     owner       = var.specs[terraform.workspace]["owner"]
   }
 }
+

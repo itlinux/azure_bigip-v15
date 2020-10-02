@@ -1,7 +1,7 @@
 # Create the virtual machine. Use the "count" variable to define how many
 # to create.
 resource "azurerm_linux_virtual_machine" "virtualmachine" {
-  count                           = var.azurerm_instances
+  count                           = var.specs[terraform.workspace]["instance_count"]
   name                            = title("${var.prefix}_machine_num_${count.index + 1}")
   admin_username                  = var.specs[terraform.workspace]["uname"]
   admin_password                  = random_password.dpasswrd.result
@@ -9,8 +9,9 @@ resource "azurerm_linux_virtual_machine" "virtualmachine" {
   location                        = azurerm_resource_group.azmain.location
   resource_group_name             = azurerm_resource_group.azmain.name
   size                            = var.specs[terraform.workspace]["instance_type"]
+  zone                            = element(local.azs, count.index % length(local.azs))
   disable_password_authentication = false
-  custom_data                     = base64encode(data.template_file.vm_onboard.rendered)
+  custom_data                     = base64encode(data.template_file.vm_onboard[count.index].rendered)
   depends_on                      = [azurerm_virtual_network.virtual_net, azurerm_public_ip.pip]
   network_interface_ids = [
     element(azurerm_network_interface.Management.*.id, count.index),
@@ -51,14 +52,16 @@ resource "azurerm_linux_virtual_machine" "virtualmachine" {
 ### Setup Onboarding scripts
 data "template_file" "vm_onboard" {
   depends_on = [azurerm_network_interface.Untrust, azurerm_network_interface.Trust]
-  template = "${file("${path.module}/onboard.yml")}"
+  count    = var.specs[terraform.workspace]["instance_count"]
+  template   = "${file("${path.module}/onboard.yml")}"
   vars = {
     DO_URL                      = var.DO_URL
     AS3_URL                     = var.AS3_URL
     TS_URL                      = var.TS_URL
     FAST_URL                    = var.FAST_URL
     onboard_log                 = var.onboard_log
-    bigip_hostname              = var.specs[terraform.workspace]["comp_name"]
+    bigip_hostname              = "${var.specs[terraform.workspace]["fqdn_name"]}${count.index}.${var.specs[terraform.workspace]["d_name"]}"
+    #bigip_hostname              = var.specs[terraform.workspace]["comp_name"]
     bigiq_license_host          = var.bigiq_ipaddress
     bigiq_license_username      = var.bigiq_user
     bigiq_license_password      = var.bigiq_pass
@@ -69,18 +72,21 @@ data "template_file" "vm_onboard" {
     bigiq_hypervisor            = var.hypervisor_type
     name_servers                = var.dnsresolvers
     search_domain               = var.searchdomain
-    default_gw                  = var.specs[terraform.workspace]["default_gw"]
-    external_ip                 = azurerm_network_interface.Untrust[0].private_ip_address
-    internal_ip                 = azurerm_network_interface.Trust[0].private_ip_address
+    default_gw                  = cidrhost(azurerm_subnet.Untrust[count.index].address_prefix,1)
+    #default_gw                  = var.specs[terraform.workspace]["default_gw"]
+    external_ip                 = azurerm_network_interface.Untrust[count.index].private_ip_address
+    internal_ip                 = azurerm_network_interface.Trust[count.index].private_ip_address
     bigipuser                   = var.specs[terraform.workspace]["uname"]
     bigippass                   = random_password.dpasswrd.result
+    region                      = var.specs[terraform.workspace]["location"]
   }
 }
 data "template_file" "ansible_info" {
   depends_on = [azurerm_linux_virtual_machine.virtualmachine]
-  template = "${file("./ansible/bigip.txt")}"
+  count               = var.specs[terraform.workspace]["instance_count"]
+  template   = "${file("./ansible/bigip.txt")}"
   vars = {
-    mgmt     = azurerm_linux_virtual_machine.virtualmachine[0].public_ip_address,
+    mgmt     = azurerm_linux_virtual_machine.virtualmachine[count.index].public_ip_address,
     username = var.specs[terraform.workspace]["uname"]
     pwd      = random_password.dpasswrd.result
     priv_ip  = azurerm_network_interface.Untrust[0].ip_configuration[1].private_ip_address
@@ -88,6 +94,7 @@ data "template_file" "ansible_info" {
 }
 
 resource "local_file" "creds_playbook" {
-  content  = data.template_file.ansible_info.rendered
-  filename = "./ansible/creds.yml"
+  count               = var.specs[terraform.workspace]["instance_count"]
+  content  = data.template_file.ansible_info[count.index].rendered
+  filename = "./ansible/creds${count.index}.yml"
 }

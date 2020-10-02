@@ -11,5 +11,9 @@ resource "random_password" "dpasswrd" {
   min_special      = 1
   special          = true
   override_special = "#$&()-_=+[]:?"
-#the override special are for the F5 to add specific sets of carathers
+  #the override special are for the F5 to add specific sets of carathers
+}
+
+resource "random_id" "randomId" {
+    byte_length = 2
 }

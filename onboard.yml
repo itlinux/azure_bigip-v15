@@ -14,6 +14,7 @@ write_files:
         tmsh modify /sys global-settings gui-setup disabled
         tmsh modify /sys sshd banner enabled banner-text 'Configured via Automation. All Sessions will be recorded!'
         tmsh modify /sys global-settings gui-security-banner-text 'Configured via Automation!'
+        tmsh modify analytics global-settings \{ offbox-protocol tcp offbox-tcp-addresses add \{ 127.0.0.1 \} offbox-tcp-port 6514 use-offbox enabled \}
         tmsh save /sys config
 
   path: /config/custom-config.sh
@@ -46,6 +47,7 @@ tmos_declared:
       provisioningLevels:
         class: Provision
         ltm: nominal
+        avr: minimum
       poolLicense:
         class: License
         licenseType: licensePool

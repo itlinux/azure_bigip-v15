@@ -7,3 +7,6 @@ output Genereated_Password {
 output Secondary_Untrust_IPs {
   value = data.azurerm_public_ip.untrust_pip_sec.*.ip_address
 }
+output mgmt_fqdn {
+  value = azurerm_public_ip.pip.*.fqdn
+}

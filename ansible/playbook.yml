@@ -55,3 +55,15 @@
       delegate_to: localhost
       tags:
         - f5_vs
+    # - name: Create a profile
+    #   bigip_profile_analytics:
+    #     name: telemetry_traffic_log_profile
+    #     provider:
+    #       server: "{{ provider.server }}"
+    #       user: "{{ provider.user }}"
+    #       password: "{{ provider.password }}"
+    #       validate_certs: "{{ cert_status }}"
+    #   delegate_to: localhost
+    #   tags:
+    #     - logs_f5
+
