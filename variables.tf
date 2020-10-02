@@ -43,23 +43,6 @@ variable "workspace-id" {
 variable "workspace_id" {
 }
 
-variable "subnets" {
-  default = [
-    {
-      name   = "trust"
-      number = 1
-    },
-    {
-      name   = "untrust"
-      number = 2
-    },
-    {
-      name   = "mgmt"
-      number = 3
-    },
-  ]
-}
-
 ## Secondary IP awareness
 # If you are using the Azure LB and have DSR enabled on the load balancing rule (on the ALB), then all you need is a primary IP on the untrust...there is no need for secondary IP address.
 # for the dynamic version only default variables are correct. I will need to update the other regions 
