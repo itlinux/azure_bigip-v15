@@ -25,13 +25,12 @@ This plan is split with every topic
 * banner
 * dpasswd
 * storage
+* ts
+* az
 * variables
 * terraform.tfvars
 
 Pretty much all options are in variables.
-
-
-=== NOTICE: Sometimes the output does not show the PublicIP, if that's the case use the following command
 
 ----
 terraform refresh  -state=statefilelocation
@@ -157,8 +156,8 @@ DONE!!
 It will get a license from the BIG-IQ. Check your BIG-IQ to make sure your BIG-IP has a license
 
 
-
 == Ansible
+It will create a set of creds based on how counts. 
 Terraform will gen the variables for ansible to run. The ansible will set the following:
 
 POOL
@@ -167,8 +166,17 @@ Virtual Server IP
 The playbook will use the secondary IP of the Untrust NIC, if you use the Azure LB you will to use the primary NIC and not the secondary.
 
 == TO DO
-Ansible Playbook to be tuned to remove services.
+Ansible Playbook to be tuned to remove services. Setting a specific IP, right now it sets the first on each credsx.
 
+== Zones
+The azs is used to spin up the BIG-IP on each zones. Depending on which Region you may not have more than 1 AZ. 
+West US 2 (example), has 3 zones, so if I spin up 4 BIG-IP it will set the #4 to zone 1 again. 
+
+== Telemetry
+It allows you to get BIG-IP telemetry in Azure Sentinel. You will need to provide workspaceID and SharekeyID. 
+
+== DNS Name
+It will automatically map to the DNS Record of Azure mapping records. Just update the info on the variable file.
 
 == Troubleshooting
 Login in to the BIG-IP and check the following files in the /var/log folder:
