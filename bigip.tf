@@ -95,7 +95,7 @@ data "template_file" "ansible_creds" {
   count      = var.specs[terraform.workspace]["instance_count"]
   template   = "${file("./ansible/playbook.txt")}"
   vars = {
-    creds    = data.template_file.ansible_info[count.index].rendered
+    creds = data.template_file.ansible_info[count.index].rendered
   }
 }
 
