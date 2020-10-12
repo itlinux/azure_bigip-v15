@@ -1,0 +1,3 @@
+bigiq_pass = "mypasswordisveryhard"
+shared_key   = "youroworksharedkeygoeshere"
+workspace_id = "yourworkspaceidgoeshere"

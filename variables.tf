@@ -1,9 +1,3 @@
-variable "azurerm_instances" {
-  default = "1"
-}
-variable "uname" {
-  default = "remo"
-}
 variable "prefix" {
   default = "rmdemoF5"
 }
