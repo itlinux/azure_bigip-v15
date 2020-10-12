@@ -80,11 +80,27 @@ data "template_file" "ansible_info" {
     mgmt     = azurerm_linux_virtual_machine.virtualmachine[count.index].public_ip_address,
     username = var.specs[terraform.workspace]["uname"]
     pwd      = random_password.dpasswrd.result
-    priv_ip  = azurerm_network_interface.Untrust[0].ip_configuration[1].private_ip_address
+    priv_ip  = azurerm_network_interface.Untrust[count.index].ip_configuration[1].private_ip_address
   }
 }
 
 resource "local_file" "creds_playbook" {
+  count    = var.specs[terraform.workspace]["instance_count"]
+  content  = data.template_file.ansible_info[count.index].rendered
+  filename = "./ansible/creds${count.index}.yml"
+}
+
+data "template_file" "ansible_creds" {
+  depends_on = [azurerm_linux_virtual_machine.virtualmachine]
+  count      = var.specs[terraform.workspace]["instance_count"]
+  template   = "${file("./ansible/playbook.txt")}"
+  vars = {
+    creds    = data.template_file.ansible_info[count.index].rendered
+  }
+}
+
+
+resource "local_file" "creds_file" {
   count    = var.specs[terraform.workspace]["instance_count"]
   content  = data.template_file.ansible_info[count.index].rendered
   filename = "./ansible/creds${count.index}.yml"

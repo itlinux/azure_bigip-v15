@@ -86,18 +86,16 @@ variable "specs" {
       sku           = "f5-big-ltm-1slot-byol"
       skukey1       = "LTM"
       skukey2       = "5G"
+      instance_count = "1"
       unitofMeasure = "yearly"
       storage_type  = "Premium_LRS"
       virtualnet    = ["10.0.0.0/16"]
-      trust         = ["10.0.40.0/24"]
-      untrust       = ["10.0.50.0/24"]
-      mgmt          = ["10.0.60.0/24"]
-      default_gw    = "10.0.50.1"
-      comp_name     = "mybigip-msdemo.f5.com"
-      static_ip     = ["10.0.40.4", "10.0.50.4", "10.0.60.5"]
-      static_sec_ip = ["10.0.40.5", "10.0.50.5", "10.0.60.6"]
-      uname         = "azureuser"
-    }
+      comp_name     = "westeurope.cloudapp.azure.com"
+      d_name         = "westeurope.cloudapp.azure.com"
+      uname          = "itlinux"
+      fqdn_name      = "westdemo"
+      azs            = ["1"]
+}
     west = {
       location      = "southcentralus"
       name_rg       = "rm_southcentral_bigip_rg"
@@ -112,18 +110,17 @@ variable "specs" {
       sku           = "f5-big-ltm-1slot-byol"
       skukey1       = "LTM"
       skukey2       = "10G"
+      instance_count = "1"
+      unitofMeasure = "yearly"
       unitofMeasure = "yearly"
       storage_type  = "Premium_LRS"
       virtualnet    = ["10.0.0.0/8"]
-      trust         = ["10.0.110.0/24"]
-      untrust       = ["10.0.120.0/24"]
-      mgmt          = ["10.0.130.0/24"]
-      default_gw    = "10.0.120.1"
-      comp_name     = "mybigip.f5.com"
-      static_ip     = ["10.0.110.4", "10.0.120.4", "10.0.130.5"]
-      static_sec_ip = ["10.0.110.5", "10.0.120.5", "10.0.130.6"]
-      uname         = "azureuser"
-    }
+      comp_name     = "southcentral.cloudapp.azure.com"
+      d_name         = "southcentral.cloudapp.azure.com"
+      uname          = "itlinux"
+      fqdn_name      = "southdemo"
+      azs            = ["1"]
+}
     central = {
       location      = "southcentralus"
       name_rg       = "remo_centralus_rg"
@@ -138,18 +135,16 @@ variable "specs" {
       sku           = "f5-big-all-2slot-byol"
       skukey1       = "ASM"
       skukey2       = "3G"
+      instance_count = "2"
+      unitofMeasure = "yearly"
       unitofMeasure = "yearly"
       storage_type  = "Premium_LRS"
       virtualnet    = ["10.0.0.0/8"]
-      trust         = ["10.0.1.0/24"]
-      untrust       = ["10.0.2.0/24"]
-      mgmt          = ["10.0.3.0/24"]
-      default_gw    = "10.0.2.1"
-      comp_name     = "rmsdemof5.southcentralus.cloudapp.azure.com"
-      static_ip     = ["10.0.1.4", "10.0.2.4", "10.0.3.5"]
-      static_sec_ip = ["10.0.1.5", "10.0.2.5", "10.0.3.6"]
-      uname         = "itlinux"
-      fqdn_name     = "rmsdemof5"
+      comp_name     = "southcentralus.cloudapp.azure.com"
+      d_name         = "southcentralus.cloudapp.azure.com"
+      uname          = "itlinux"
+      fqdn_name      = "southdemo"
+      azs            = ["1", "2"]
     }
   }
 }

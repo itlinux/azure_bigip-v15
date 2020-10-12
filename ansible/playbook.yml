@@ -3,7 +3,7 @@
 ---
 - hosts: localhost
   connection: local
-  vars_files:
+  incude_vars:
   - creds.yml
   tasks:
     - name: Create a pool

@@ -166,7 +166,7 @@ Virtual Server IP
 The playbook will use the secondary IP of the Untrust NIC, if you use the Azure LB you will to use the primary NIC and not the secondary.
 
 == TO DO
-Ansible Playbook to be tuned to remove services. Setting a specific IP, right now it sets the first on each credsx.
+Ansible Playbooks. Setting a specific IP, right now for each BIG-IP on each credsx, this is used for ansible selfIP on the VIP.
 
 == Zones
 The azs is used to spin up the BIG-IP on each zones. Depending on which Region you may not have more than 1 AZ. 
