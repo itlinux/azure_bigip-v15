@@ -3,8 +3,8 @@
 ---
 - hosts: localhost
   connection: local
-  incude_vars:
-  - creds.yml
+  vars_files:
+    - creds.yml
   tasks:
     - name: Create a pool
       bigip_pool:
