@@ -75,7 +75,7 @@ data "template_file" "vm_onboard" {
 data "template_file" "ansible_info" {
   depends_on = [azurerm_linux_virtual_machine.virtualmachine]
   count      = var.specs[terraform.workspace]["instance_count"]
-  template   = "${file("./ansible/bigip.txt")}"
+  template   = file("./ansible/bigip.txt")
   vars = {
     mgmt     = azurerm_linux_virtual_machine.virtualmachine[count.index].public_ip_address,
     username = var.specs[terraform.workspace]["uname"]
@@ -90,14 +90,14 @@ resource "local_file" "creds_playbook" {
   filename = "./ansible/creds${count.index}.yml"
 }
 
-data "template_file" "ansible_creds" {
-  depends_on = [azurerm_linux_virtual_machine.virtualmachine]
-  count      = var.specs[terraform.workspace]["instance_count"]
-  template   = "${file("./ansible/playbook.txt")}"
-  vars = {
-    creds = data.template_file.ansible_info[count.index].rendered
-  }
-}
+# data "template_file" "ansible_creds" {
+#   depends_on = [azurerm_linux_virtual_machine.virtualmachine]
+#   count      = var.specs[terraform.workspace]["instance_count"]
+#   template   = file("./ansible/.txt")
+#   vars = {
+#     creds = data.template_file.ansible_info[count.index].rendered
+#   }
+# }
 
 
 resource "local_file" "creds_file" {

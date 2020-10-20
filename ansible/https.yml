@@ -4,7 +4,7 @@
 - hosts: localhost
   connection: local
   vars_files:
-  - creds.yml
+  - "{{ creds_file }}"
   tasks:
     - name: Create client SSL profile
       bigip_profile_client_ssl:
