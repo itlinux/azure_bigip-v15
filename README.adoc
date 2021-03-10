@@ -126,7 +126,7 @@ Changes the terraform.tfvars to set to your name and IP subnet/network you want 
 
 == Execute the manifest
 
-Create the Resource Group first with specific location example below
+If you do not have a Resource Group then create the Resource Group first with specific location example below
 ----
 az group create -l westus2 -n remo-pregroup
 ----
