@@ -6,13 +6,13 @@ resource "azurerm_linux_virtual_machine" "virtualmachine" {
   admin_username                  = var.specs[terraform.workspace]["uname"]
   admin_password                  = random_password.dpasswrd.result
   computer_name                   = title("${var.specs[terraform.workspace]["comp_name"]}-${count.index + 1}")
-  location                        = azurerm_resource_group.azmain.location
-  resource_group_name             = azurerm_resource_group.azmain.name
+  location                        = data.azurerm_resource_group.azmain.location
+  resource_group_name             = data.azurerm_resource_group.azmain.name
   size                            = var.specs[terraform.workspace]["instance_type"]
   zone                            = element(local.azs, count.index % length(local.azs))
   disable_password_authentication = false
   custom_data                     = base64encode(data.template_file.vm_onboard[count.index].rendered)
-  depends_on                      = [azurerm_virtual_network.virtual_net, azurerm_public_ip.pip]
+  depends_on                      = [azurerm_virtual_network.virtual_net]
   network_interface_ids = [
     element(azurerm_network_interface.Management.*.id, count.index),
     element(azurerm_network_interface.Untrust.*.id, count.index),
@@ -33,7 +33,7 @@ resource "azurerm_linux_virtual_machine" "virtualmachine" {
     publisher = var.specs[terraform.workspace]["publisher"]
   }
 
-  #Disk
+  # Disk
   os_disk {
     name                 = "${var.prefix}-osdisk-${count.index}"
     storage_account_type = var.specs[terraform.workspace]["storage_type"]
@@ -44,10 +44,10 @@ resource "azurerm_linux_virtual_machine" "virtualmachine" {
 
 ### Setup Onboarding scripts
 data "template_file" "vm_onboard" {
-  depends_on = [azurerm_network_interface.Untrust, azurerm_network_interface.Trust]
-  count      = var.specs[terraform.workspace]["instance_count"]
-  template   = "${file("${path.module}/onboard.yml")}"
-  vars = {
+  depends_on                    = [azurerm_network_interface.Untrust, azurerm_network_interface.Trust]
+  count                         = var.specs[terraform.workspace]["instance_count"]
+  template                      = file("${path.module}/onboard.yml")
+  vars                          = {
     DO_URL                      = var.DO_URL
     AS3_URL                     = var.AS3_URL
     TS_URL                      = var.TS_URL
@@ -69,9 +69,10 @@ data "template_file" "vm_onboard" {
     internal_ip                 = azurerm_network_interface.Trust[count.index].private_ip_address
     bigipuser                   = var.specs[terraform.workspace]["uname"]
     bigippass                   = random_password.dpasswrd.result
-    region                      = var.specs[terraform.workspace]["location"]
+    region                      = data.azurerm_resource_group.azmain.location
   }
 }
+
 data "template_file" "ansible_info" {
   depends_on = [azurerm_linux_virtual_machine.virtualmachine]
   count      = var.specs[terraform.workspace]["instance_count"]
@@ -89,16 +90,6 @@ resource "local_file" "creds_playbook" {
   content  = data.template_file.ansible_info[count.index].rendered
   filename = "./ansible/creds${count.index}.yml"
 }
-
-# data "template_file" "ansible_creds" {
-#   depends_on = [azurerm_linux_virtual_machine.virtualmachine]
-#   count      = var.specs[terraform.workspace]["instance_count"]
-#   template   = file("./ansible/.txt")
-#   vars = {
-#     creds = data.template_file.ansible_info[count.index].rendered
-#   }
-# }
-
 
 resource "local_file" "creds_file" {
   count    = var.specs[terraform.workspace]["instance_count"]

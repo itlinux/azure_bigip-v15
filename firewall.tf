@@ -1,7 +1,7 @@
 resource "azurerm_network_security_group" "security_gr" {
   count               = var.specs[terraform.workspace]["instance_count"]
-  location            = azurerm_resource_group.azmain.location
-  resource_group_name = azurerm_resource_group.azmain.name
+  location            = data.azurerm_resource_group.azmain.location
+  resource_group_name = data.azurerm_resource_group.azmain.name
   name                = "${var.prefix}-sg-${count.index}"
 
   security_rule {
@@ -39,6 +39,18 @@ resource "azurerm_network_security_group" "security_gr" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
+  security_rule {
+    name                       = "Logs"
+    priority                   = 103
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8100"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
   tags = {
     environment = var.specs[terraform.workspace]["environment"]
   }
@@ -49,8 +61,8 @@ resource "azurerm_network_security_group" "security_gr" {
 resource "azurerm_network_security_group" "application_sg" {
   count               = var.specs[terraform.workspace]["instance_count"]
   name                = "${var.prefix}-app-sg-${count.index}"
-  location            = azurerm_resource_group.azmain.location
-  resource_group_name = azurerm_resource_group.azmain.name
+  location            = data.azurerm_resource_group.azmain.location
+  resource_group_name = data.azurerm_resource_group.azmain.name
 
   security_rule {
     name                       = "HTTPS"
@@ -96,6 +108,18 @@ resource "azurerm_network_security_group" "application_sg" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "4353"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "Logs-App"
+    priority                   = 1005
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8100"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }

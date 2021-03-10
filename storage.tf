@@ -9,8 +9,8 @@ resource "random_id" "storage_account" {
 resource "azurerm_storage_account" "storage" {
   count                    = var.specs[terraform.workspace]["instance_count"]
   name                     = lower(random_id.storage_account[count.index].hex)
-  resource_group_name      = azurerm_resource_group.azmain.name
-  location                 = azurerm_resource_group.azmain.location
+  resource_group_name      = data.azurerm_resource_group.azmain.name
+  location                 = data.azurerm_resource_group.azmain.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 }

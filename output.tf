@@ -10,3 +10,6 @@ output Secondary_Untrust_IPs {
 output mgmt_fqdn {
   value = azurerm_public_ip.pip.*.fqdn
 }
+output mac_address_mgmt {
+  value = azurerm_network_interface.Management[*].mac_address
+}

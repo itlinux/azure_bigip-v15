@@ -3,8 +3,8 @@
 resource "azurerm_public_ip" "pip" {
   count               = var.specs[terraform.workspace]["instance_count"]
   name                = "pip-${count.index}-mgmt"
-  location            = azurerm_resource_group.azmain.location
-  resource_group_name = azurerm_resource_group.azmain.name
+  location            = data.azurerm_resource_group.azmain.location
+  resource_group_name = data.azurerm_resource_group.azmain.name
   allocation_method   = "Static"   # Static is required due to the use of the Standard sku
   sku                 = "Standard" # the Standard sku is required due to the use of availability zones
   domain_name_label   = "${var.specs[terraform.workspace]["fqdn_name"]}${count.index}"
@@ -16,8 +16,8 @@ resource "azurerm_public_ip" "untrust_pip" {
   depends_on          = [azurerm_virtual_network.virtual_net]
   count               = var.specs[terraform.workspace]["instance_count"]
   name                = "pip-${count.index}-Untrust"
-  location            = azurerm_resource_group.azmain.location
-  resource_group_name = azurerm_resource_group.azmain.name
+  location            = data.azurerm_resource_group.azmain.location
+  resource_group_name = data.azurerm_resource_group.azmain.name
   allocation_method   = "Static"   # Static is required due to the use of the Standard sku
   sku                 = "Standard" # the Standard sku is required due to the use of availability zones
   zones               = [element(local.azs, count.index)]
@@ -26,8 +26,8 @@ resource "azurerm_public_ip" "untrust_pip_sec" {
   depends_on          = [azurerm_virtual_network.virtual_net]
   count               = var.specs[terraform.workspace]["instance_count"]
   name                = "pip-${count.index}-Untrust_sec"
-  location            = azurerm_resource_group.azmain.location
-  resource_group_name = azurerm_resource_group.azmain.name
+  location            = data.azurerm_resource_group.azmain.location
+  resource_group_name = data.azurerm_resource_group.azmain.name
   allocation_method   = "Static"   # Static is required due to the use of the Standard sku
   sku                 = "Standard" # the Standard sku is required due to the use of availability zones
   zones               = [element(local.azs, count.index)]
@@ -56,8 +56,8 @@ resource "azurerm_network_interface" "Management" {
   depends_on          = [azurerm_virtual_network.virtual_net]
   count               = var.specs[terraform.workspace]["instance_count"]
   name                = "nic-${count.index}-mgmt"
-  location            = azurerm_resource_group.azmain.location
-  resource_group_name = azurerm_resource_group.azmain.name
+  location            = data.azurerm_resource_group.azmain.location
+  resource_group_name = data.azurerm_resource_group.azmain.name
 
   ip_configuration {
     name                          = "mgmt-${count.index}-ip-0"
@@ -73,8 +73,8 @@ resource "azurerm_network_interface" "Untrust" {
   depends_on           = [azurerm_virtual_network.virtual_net]
   count                = var.specs[terraform.workspace]["instance_count"]
   name                 = "nic-${count.index}-untrust"
-  location             = azurerm_resource_group.azmain.location
-  resource_group_name  = azurerm_resource_group.azmain.name
+  location             = data.azurerm_resource_group.azmain.location
+  resource_group_name  = data.azurerm_resource_group.azmain.name
   enable_ip_forwarding = true
   # this option enable_accelerated_networking will only work with specific Images version. DS4 is one of them
   enable_accelerated_networking = true
@@ -106,8 +106,8 @@ resource "azurerm_network_interface" "Trust" {
   depends_on                    = [azurerm_virtual_network.virtual_net]
   count                         = var.specs[terraform.workspace]["instance_count"]
   name                          = "nic-${count.index}-trust"
-  location                      = azurerm_resource_group.azmain.location
-  resource_group_name           = azurerm_resource_group.azmain.name
+  location                      = data.azurerm_resource_group.azmain.location
+  resource_group_name           = data.azurerm_resource_group.azmain.name
   enable_ip_forwarding          = true
   enable_accelerated_networking = true
 

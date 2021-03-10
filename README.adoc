@@ -126,6 +126,16 @@ Changes the terraform.tfvars to set to your name and IP subnet/network you want 
 
 == Execute the manifest
 
+Create the Resource Group first with specific location example below
+----
+az group create -l westus2 -n remo-pregroup
+----
+
+Update the variable.tf file with the Resource Group to use
+----
+name_rg = "your resource group name"
+----
+
 Set the Plan output
 ----
 terraform plan -out=tfplan_bigip

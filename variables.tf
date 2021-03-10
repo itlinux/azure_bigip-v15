@@ -43,8 +43,8 @@ variable "workspace_id" {
 variable "specs" {
   default = {
     default = {
-      location       = "westus 2"
-      name_rg        = "westus2_remo_rg"
+      #location       = "westus 2"
+      name_rg        = "westus2_rm_rg"
       instance_type  = "Standard_DS5_v2"
       environment    = "This env is using BIG-IP"
       owner          = "Remo Mattei"
@@ -55,7 +55,7 @@ variable "specs" {
       publisher      = "f5-networks"
       sku            = "f5-big-all-2slot-byol"
       skukey1        = "LTM"
-      instance_count = "2"
+      instance_count = "1"
       skukey2        = "10G"
       unitofMeasure  = "yearly"
       storage_type   = "Premium_LRS"
@@ -63,11 +63,11 @@ variable "specs" {
       comp_name      = "westus2.cloudapp.azure.com"
       d_name         = "westus2.cloudapp.azure.com"
       uname          = "itlinux"
-      fqdn_name      = "rmdemo"
+      fqdn_name      = "demodata"
       azs            = ["1", "3"]
     }
     europe = {
-      location       = "west europe"
+      #location       = "west europe"
       name_rg        = "westeurope_remo_rg"
       instance_type  = "Standard_DS5_v2"
       environment    = "This env is using BIG-IP"
@@ -91,7 +91,7 @@ variable "specs" {
       azs            = ["1", "3"]
     }
     east = {
-      location       = "east"
+      #location       = "east"
       name_rg        = "east_remo_rg"
       instance_type  = "Standard_DS5_v2"
       environment    = "This env is using BIG-IP"
@@ -115,7 +115,7 @@ variable "specs" {
       azs            = ["1", "3"]
     }
     central = {
-      location       = "centralus"
+      #location       = "centralus"
       name_rg        = "centralus_remo_rg"
       instance_type  = "Standard_DS5_v2"
       environment    = "This env is using BIG-IP"
